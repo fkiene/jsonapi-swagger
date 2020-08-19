@@ -4,6 +4,7 @@ require 'jsonapi/swagger/version'
 require 'jsonapi/swagger/railtie' if defined?(Rails)
 require 'jsonapi/swagger/json'
 require 'jsonapi/swagger/resource'
+require 'jsonapi/swagger/formatter'
 
 module Jsonapi
   module Swagger
