@@ -66,7 +66,7 @@ module Jsonapi
     end
 
     def route_resouces
-      format(resouces_name).tableize
+      resouces_name.tableize
     end
 
     def model_class_name
@@ -82,7 +82,7 @@ module Jsonapi
     end
 
     def model_klass
-      format(file_name).safe_constantize
+      file_name.camelize.safe_constantize
     end
 
     def resource_klass
