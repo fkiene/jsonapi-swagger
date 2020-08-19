@@ -147,6 +147,7 @@ module Jsonapi
         end
         model_klass.columns.each do |col|
           col_name = transform_method ? col.name.send(transform_method) : col.name
+          col_name = format(col_name)
           clos[col_name.to_sym] = { type: swagger_type(col), items_type: col.type, is_array: col.array, nullable: col.null, comment: col.comment }
           clos[col_name.to_sym][:comment] = safe_encode(col.comment) if need_encoding
         end
