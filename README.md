@@ -33,6 +33,8 @@ Jsonapi::Swagger.config do |config|
   config.version = '2.0'
   config.info = { title: 'API V1', version: 'V1'}
   config.file_path = 'v1/swagger.json'
+  # underscored, camelized, dasherized, or custom
+  config.attribute_format = 'dasherized'
 end
 ```
 

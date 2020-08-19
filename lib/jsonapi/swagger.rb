@@ -10,7 +10,7 @@ module Jsonapi
     class Error < StandardError; end
 
     class << self
-      attr_accessor :version, :info, :file_path, :base_path, :use_rswag
+      attr_accessor :version, :info, :file_path, :base_path, :use_rswag, :attribute_format
 
       def config
         yield self
@@ -34,6 +34,10 @@ module Jsonapi
 
       def use_rswag
         @use_rswag ||= false
+      end
+
+      def attribute_format
+        @attribute_format ||= 'dasherized'
       end
 
       def attribute_default

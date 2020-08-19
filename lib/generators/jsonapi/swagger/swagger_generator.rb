@@ -70,7 +70,7 @@ module Jsonapi
     end
 
     def model_class_name
-      (class_path + [file_name]).map!(&:camelize).join("::")
+      (class_path + [file_name]).map!(&:camelize).join('::')
     end
 
     def sortable_fields_desc
@@ -117,6 +117,21 @@ module Jsonapi
       resource_klass.mutable?
     end
 
+    def attribute_format
+      Jsonapi::Swagger.attribute_format
+    end
+
+    def format(key)
+      case attribute_format
+      when 'underscored'
+        key
+      when 'camelized'
+        Jsonapi::Swagger::CamelizedFormatter.format(key)
+      else
+        Jsonapi::Swagger::DasherizedFormatter.format(key)
+      end
+    end
+
     def attribute_default
       Jsonapi::Swagger.attribute_default
     end
@@ -131,8 +146,8 @@ module Jsonapi
           h[k] = attribute_default
         end
         model_klass.columns.each do |col|
-          col_name = transform_method ? col.name.send(transform_method) : col.name
-          clos[col_name.to_sym] = { type: swagger_type(col), items_type: col.type, is_array: col.array,  nullable: col.null, comment: col.comment }
+          col_name = transform_method ? col.name.send(transform_method) : format(col.name)
+          clos[col_name.to_sym] = { type: swagger_type(col), items_type: col.type, is_array: col.array, nullable: col.null, comment: col.comment }
           clos[col_name.to_sym][:comment] = safe_encode(col.comment) if need_encoding
         end
       end
@@ -153,12 +168,12 @@ module Jsonapi
       return relation.name if relation.respond_to?(:name)
     end
 
-    def t(key, options={})
+    def t(key, options = {})
       content = tt(key, options)
       safe_encode(content)
     end
 
-    def tt(key, options={})
+    def tt(key, options = {})
       options[:scope] = :jsonapi_swagger
       options[:default] = key.to_s.humanize
       I18n.t(key, options)
