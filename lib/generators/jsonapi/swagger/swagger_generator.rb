@@ -66,7 +66,7 @@ module Jsonapi
     end
 
     def route_resouces
-      resouces_name.tableize
+      format(resouces_name.tableize)
     end
 
     def model_class_name
@@ -82,7 +82,7 @@ module Jsonapi
     end
 
     def model_klass
-      file_name.camelize.safe_constantize
+      format(file_name).safe_constantize
     end
 
     def resource_klass
@@ -90,15 +90,15 @@ module Jsonapi
     end
 
     def attributes
-      resource_klass.attributes.except(:id)
+      resource_klass.attributes.except(:id).transform_keys { |key| format(key) }
     end
 
     def relationships
-      resource_klass.relationships
+      resource_klass.relationships.transform_keys { |key| format(key) }
     end
 
     def sortable_fields
-      resource_klass.sortable_fields
+      resource_klass.sortable_fields.transform_keys { |key| format(key) }
     end
 
     def creatable_fields
@@ -110,7 +110,7 @@ module Jsonapi
     end
 
     def filters
-      resource_klass.filters
+      resource_klass.filters.transform_keys { |key| format(key) }
     end
 
     def mutable?
@@ -146,7 +146,7 @@ module Jsonapi
           h[k] = attribute_default
         end
         model_klass.columns.each do |col|
-          col_name = transform_method ? col.name.send(transform_method) : format(col.name)
+          col_name = transform_method ? col.name.send(transform_method) : col.name
           clos[col_name.to_sym] = { type: swagger_type(col), items_type: col.type, is_array: col.array, nullable: col.null, comment: col.comment }
           clos[col_name.to_sym][:comment] = safe_encode(col.comment) if need_encoding
         end
