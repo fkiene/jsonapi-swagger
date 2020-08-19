@@ -66,7 +66,7 @@ module Jsonapi
     end
 
     def route_resouces
-      format(resouces_name.tableize)
+      format(resouces_name).tableize
     end
 
     def model_class_name
@@ -82,7 +82,7 @@ module Jsonapi
     end
 
     def model_klass
-      format(file_name).safe_constantize
+      file_name.safe_constantize
     end
 
     def resource_klass
@@ -90,7 +90,7 @@ module Jsonapi
     end
 
     def attributes
-      resource_klass.attributes.except(:id).transform_keys { |key| format(key) }
+      resource_klass.attributes.except(:id)
     end
 
     def relationships
