@@ -175,7 +175,7 @@ module Jsonapi
 
     def tt(key, options = {})
       options[:scope] = :jsonapi_swagger
-      options[:default] = key.to_s.humanize
+      options[:default] = format(key.to_s.humanize)
       I18n.t(key, options)
     end
 
