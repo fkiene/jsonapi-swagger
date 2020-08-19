@@ -98,7 +98,7 @@ module Jsonapi
     end
 
     def sortable_fields
-      resource_klass.sortable_fields.transform_keys { |key| format(key) }
+      resource_klass.sortable_fields
     end
 
     def creatable_fields
@@ -110,7 +110,7 @@ module Jsonapi
     end
 
     def filters
-      resource_klass.filters.transform_keys { |key| format(key) }
+      resource_klass.filters
     end
 
     def mutable?
