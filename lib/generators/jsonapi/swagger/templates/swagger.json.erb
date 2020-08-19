@@ -13,7 +13,7 @@
         if relationships.present?
           parameters << { name: :include, in: :query, type: :string, description: tt(:include_related_data), required: false }
         end
-        filters.each do |format(filter_attr), filter_config|
+        filters.each do |filter_attr, filter_config|
           parameters << { name: :"filter[#{format(filter_attr)}]", in: :query, type: :string, description: tt(:filter_field), required: false}
         end
         parameters << { name: :"fields[#{format(route_resouces)}]", in: :query, type: :string, description: tt(:display_field), required: false }
