@@ -74,15 +74,16 @@
     end
 
     def properties(attrs: [])
-      Hash.new{|h, k| h[k] = {}} .tap do |props|
+      properties = Hash.new{|h, k| h[k] = {}} .tap do |props|
         attrs.each do |attr|
          columns = columns_with_comment(need_encoding: false)
-          props[format(attr)][:type] = columns[attr][:type]
-          props[format(attr)][:items] = { type: columns[attr][:items_type] } if columns[attr][:is_array]
-          props[format(attr)][:'x-nullable'] = columns[attr][:nullable]
-          props[format(attr)][:description] = columns[attr][:comment]
+          props[attr][:type] = columns[attr][:type]
+          props[attr][:items] = { type: columns[attr][:items_type] } if columns[attr][:is_array]
+          props[attr][:'x-nullable'] = columns[attr][:nullable]
+          props[attr][:description] = columns[attr][:comment]
         end
       end
+      properties.transform_keys{ |key| format(key) }
     end
 
     def relationships_properties
