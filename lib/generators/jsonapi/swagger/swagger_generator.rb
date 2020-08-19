@@ -82,7 +82,7 @@ module Jsonapi
     end
 
     def model_klass
-      file_name.safe_constantize
+      format(file_name).safe_constantize
     end
 
     def resource_klass

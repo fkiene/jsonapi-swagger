@@ -74,7 +74,7 @@
     end
 
     def properties(attrs: [])
-      properties = Hash.new{|h, k| h[k] = {}} .tap do |props|
+      Hash.new{|h, k| h[k] = {}} .tap do |props|
         attrs.each do |attr|
          columns = columns_with_comment(need_encoding: false)
           props[attr][:type] = columns[attr][:type]
@@ -83,7 +83,6 @@
           props[attr][:description] = columns[attr][:comment]
         end
       end
-      properties.transform_keys{ |key| format(key) }
     end
 
     def relationships_properties
