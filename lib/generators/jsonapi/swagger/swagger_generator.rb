@@ -126,9 +126,9 @@ module Jsonapi
       when 'underscored'
         key
       when 'camelized'
-        Jsonapi::Swagger::CamelizedFormatter.format(key)
+        Jsonapi::Swagger::CamelizedFormatter.format(key.to_s)
       else
-        Jsonapi::Swagger::DasherizedFormatter.format(key)
+        Jsonapi::Swagger::DasherizedFormatter.format(key.to_s)
       end
     end
 
