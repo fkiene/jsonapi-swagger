@@ -74,7 +74,7 @@
     end
 
     def properties(attrs: [])
-      Hash.new{|h, k| h[k] = {}} .tap do |props|
+      formated_properties = Hash.new{|h, k| h[k] = {}} .tap do |props|
         attrs.each do |attr|
          columns = columns_with_comment(need_encoding: false)
           props[attr][:type] = columns[attr][:type]
@@ -83,25 +83,26 @@
           props[attr][:description] = columns[attr][:comment]
         end
       end
+      formated_properties.transform_keys{ |key| format(key.to_s) }
     end
 
     def relationships_properties
       {}.tap do |relat_props|
         relationships.each do |relation_name, relation|
-          relation_name_camelize = relation_name.to_s.camelize
+          relation_name_formated = format(relation_name.to_s)
             relat_props[relation_name] = {
               type: :object,
               properties: {
               links: {
                 type: :object,
                 properties: {
-                  self: { type: :string, description:  tt(:associate_list_link, model: relation_name_camelize) },
-                  related: { type: :string, description: tt(:related_link, model: relation_name_camelize) },
+                  self: { type: :string, description:  tt(:associate_list_link, model: relation_name_formated) },
+                  related: { type: :string, description: tt(:related_link, model: relation_name_formated) },
                 },
-                description: tt(:related_link, model: relation_name_camelize)
+                description: tt(:related_link, model: relation_name_formated)
               },
             },
-            description: tt(:related_model, model: relation_name_camelize)
+            description: tt(:related_model, model: relation_name_formated)
           }
         end
       end
@@ -110,7 +111,7 @@
     def create_relationships_properties
       {}.tap do |relat_props|
         relationships.each do |relation_name, relation|
-          relation_name_camelize = relation_name.to_s.camelize
+          relation_name_formated = format(relation_name.to_s)
           relat_props[relation_name] = {
             type: :object,
             properties: {
@@ -120,22 +121,22 @@
                   type: :object,
                   properties: {
                     type: { type: :string, default: relation.table_name },
-                    id: { type: :string, description: "#{relation_name_camelize} ID" },
+                    id: { type: :string, description: "#{relation_name_formated} ID" },
                   },
                 },
-                description: tt(:related_ids, model: relation_name_camelize)
+                description: tt(:related_ids, model: relation_name_formated)
               }
             },
-            description: tt(:related_ids, model: relation_name_camelize)
+            description: tt(:related_ids, model: relation_name_formated)
           }
           if relation.try(:belongs_to?)
             relat_props[relation_name][:properties][:data] = {
               type: :object,
               properties: {
                 type: { type: :string, default: relation.table_name },
-                id: { type: :string, description: "#{relation_name_camelize} ID" },
+                id: { type: :string, description: "#{relation_name_formated} ID" },
               },
-              description: tt(:related_id, model: relation_name_camelize)
+              description: tt(:related_id, model: relation_name_formated)
             }
           end
         end
