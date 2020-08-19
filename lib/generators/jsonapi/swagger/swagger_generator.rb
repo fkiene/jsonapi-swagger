@@ -94,7 +94,7 @@ module Jsonapi
     end
 
     def relationships
-      resource_klass.relationships.transform_keys { |key| format(key) }
+      resource_klass.relationships
     end
 
     def sortable_fields
